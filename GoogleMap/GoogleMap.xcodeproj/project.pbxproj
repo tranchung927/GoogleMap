@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8461F20C1F19F3DD00D27BA3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8461F20B1F19F3DD00D27BA3 /* AppDelegate.swift */; };
-		8461F20E1F19F3DD00D27BA3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8461F20D1F19F3DD00D27BA3 /* ViewController.swift */; };
+		8461F20E1F19F3DD00D27BA3 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8461F20D1F19F3DD00D27BA3 /* MapViewController.swift */; };
 		8461F2111F19F3DD00D27BA3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8461F20F1F19F3DD00D27BA3 /* Main.storyboard */; };
 		8461F2131F19F3DD00D27BA3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8461F2121F19F3DD00D27BA3 /* Assets.xcassets */; };
 		8461F2161F19F3DD00D27BA3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8461F2141F19F3DD00D27BA3 /* LaunchScreen.storyboard */; };
@@ -19,7 +19,7 @@
 		50B00F88FC9DA7C587F71D6E /* Pods-GoogleMap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoogleMap.release.xcconfig"; path = "Pods/Target Support Files/Pods-GoogleMap/Pods-GoogleMap.release.xcconfig"; sourceTree = "<group>"; };
 		8461F2081F19F3DD00D27BA3 /* GoogleMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GoogleMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8461F20B1F19F3DD00D27BA3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		8461F20D1F19F3DD00D27BA3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		8461F20D1F19F3DD00D27BA3 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		8461F2101F19F3DD00D27BA3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8461F2121F19F3DD00D27BA3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8461F2151F19F3DD00D27BA3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -71,7 +71,7 @@
 			isa = PBXGroup;
 			children = (
 				8461F20B1F19F3DD00D27BA3 /* AppDelegate.swift */,
-				8461F20D1F19F3DD00D27BA3 /* ViewController.swift */,
+				8461F20D1F19F3DD00D27BA3 /* MapViewController.swift */,
 				8461F20F1F19F3DD00D27BA3 /* Main.storyboard */,
 				8461F2121F19F3DD00D27BA3 /* Assets.xcassets */,
 				8461F2141F19F3DD00D27BA3 /* LaunchScreen.storyboard */,
@@ -210,7 +210,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8461F20E1F19F3DD00D27BA3 /* ViewController.swift in Sources */,
+				8461F20E1F19F3DD00D27BA3 /* MapViewController.swift in Sources */,
 				8461F20C1F19F3DD00D27BA3 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -391,6 +391,7 @@
 				8461F21C1F19F3DD00D27BA3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

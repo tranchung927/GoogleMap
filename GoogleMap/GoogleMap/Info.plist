@@ -43,12 +43,12 @@
 	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Cho phep cap nhat vi tri</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string></string>
-    <key>LSApplicationQueriesSchemes</key>
-    <array>
-        <string>googlechromes</string>
-        <string>comgooglemaps</string>
-    </array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>googlechromes</string>
+		<string>comgooglemaps</string>
+	</array>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Cho cap nhat vi tri</string>
 </dict>
 </plist>
