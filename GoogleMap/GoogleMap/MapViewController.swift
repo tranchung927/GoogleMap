@@ -26,7 +26,7 @@ class MapViewController: UIViewController {
         return locationManager
     }()
     
-    var startLocation = CLLocation()
+    var startLocation = CLLocationCoordinate2D()
     var endLocation = CLLocationCoordinate2D()
     
     // Declare GMSMarker instance at the class level.
@@ -41,15 +41,20 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
         locationManager.delegate = self
         mapView.delegate = self
+        resultNotification()
     }
-    func polyLines(start: CLLocation, end: CLLocationCoordinate2D) {
-        let path = GMSMutablePath()
-        path.addLatitude(start.coordinate.latitude, longitude: start.coordinate.longitude)
-        path.addLatitude(end.latitude, longitude: end.longitude)
-        
-        let polyline = GMSPolyline(path: path)
+    
+    func resultNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(drawPolyLines), name: notificationJSON, object: nil)
+    }
+    @objc func drawPolyLines() {
+        guard let points = DataServices.shared.polyLines?.routes[0].overview_polyline.points else {return}
+        guard let path = GMSPath(fromEncodedPath: points) else {
+            return
+        }
+         let polyline = GMSPolyline(path: path) 
         polyline.strokeColor = .blue
-        polyline.strokeWidth = 5.0
+        polyline.strokeWidth = 4.0
         polyline.map = mapView
     }
 }
@@ -58,7 +63,7 @@ class MapViewController: UIViewController {
 extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let location: CLLocation = locations.last!
-        startLocation = location
+        startLocation = location.coordinate
         mapView.camera = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: zoomLevel, bearing: 0, viewingAngle: 0)
         mapView.settings.myLocationButton = true
         mapView.isMyLocationEnabled = true
@@ -85,8 +90,7 @@ extension MapViewController: GMSMapViewDelegate {
         infoMarker.infoWindowAnchor.y = 0
         infoMarker.map = mapView
         mapView.selectedMarker = infoMarker
-        
-        polyLines(start: startLocation, end: endLocation)
+        DataServices.shared.drawPath(start: startLocation, end: endLocation)
     }
     func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
         
