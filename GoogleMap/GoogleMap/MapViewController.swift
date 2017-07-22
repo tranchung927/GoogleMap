@@ -9,13 +9,12 @@
 import UIKit
 import GooglePlaces
 import GoogleMaps
-import SystemConfiguration
 
 class MapViewController: UIViewController {
     @IBOutlet weak var mapView: GMSMapView!
     // Initialize the location manager
     var locationManager: CLLocationManager = {
-       var locationManager = CLLocationManager()
+        var locationManager = CLLocationManager()
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.distanceFilter = 500
         locationManager.requestAlwaysAuthorization()
@@ -26,6 +25,10 @@ class MapViewController: UIViewController {
         }
         return locationManager
     }()
+    
+    var startLocation = CLLocation()
+    var endLocation = CLLocationCoordinate2D()
+    
     // Declare GMSMarker instance at the class level.
     let infoMarker = GMSMarker()
     
@@ -38,21 +41,16 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
         locationManager.delegate = self
         mapView.delegate = self
-        mapView.settings.compassButton = true
-        mapView.settings.indoorPicker = true
     }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if isInternetAvailable() == false {
-            let controller = UIAlertController(title: "No Internet Detected", message: "This app requires an Internet connection", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: nil)
-            let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-            
-            controller.addAction(ok)
-            controller.addAction(cancel)
-            
-            present(controller, animated: true, completion: nil)
-        }
+    func polyLines(start: CLLocation, end: CLLocationCoordinate2D) {
+        let path = GMSMutablePath()
+        path.addLatitude(start.coordinate.latitude, longitude: start.coordinate.longitude)
+        path.addLatitude(end.latitude, longitude: end.longitude)
+        
+        let polyline = GMSPolyline(path: path)
+        polyline.strokeColor = .blue
+        polyline.strokeWidth = 5.0
+        polyline.map = mapView
     }
 }
 
@@ -60,17 +58,16 @@ class MapViewController: UIViewController {
 extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let location: CLLocation = locations.last!
-        if isInternetAvailable() == true {
-            mapView.camera = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: zoomLevel, bearing: 0, viewingAngle: 0)
-            mapView.settings.myLocationButton = true
-            mapView.isMyLocationEnabled = true
-            
-            marker.map = self.mapView
-            marker.position = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
-            marker.title = "Your location"
-            marker.snippet = "Population: 8,174,100"
-            marker.icon = GMSMarker.markerImage(with: .black)
-        }
+        startLocation = location
+        mapView.camera = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: zoomLevel, bearing: 0, viewingAngle: 0)
+        mapView.settings.myLocationButton = true
+        mapView.isMyLocationEnabled = true
+        
+        marker.map = self.mapView
+        marker.position = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
+        marker.title = "Your location"
+        marker.snippet = "Population: 8,174,100"
+        marker.icon = GMSMarker.markerImage(with: .black)
         manager.stopUpdatingLocation()
     }
     
@@ -82,35 +79,17 @@ extension MapViewController: GMSMapViewDelegate {
     
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         infoMarker.position = coordinate
+        endLocation = coordinate
         infoMarker.title = "Destination"
         infoMarker.opacity = 0.8
         infoMarker.infoWindowAnchor.y = 0
         infoMarker.map = mapView
         mapView.selectedMarker = infoMarker
+        
+        polyLines(start: startLocation, end: endLocation)
     }
     func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
         
     }
 }
 
-extension MapViewController {
-    func isInternetAvailable() -> Bool {
-        var zeroAddress = sockaddr_in()
-        zeroAddress.sin_len = UInt8(MemoryLayout.size(ofValue: zeroAddress))
-        zeroAddress.sin_family = sa_family_t(AF_INET)
-        
-        let defaultRouteReachability = withUnsafePointer(to: &zeroAddress) {
-            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {zeroSockAddress in
-                SCNetworkReachabilityCreateWithAddress(nil, zeroSockAddress)
-            }
-        }
-        
-        var flags = SCNetworkReachabilityFlags()
-        if !SCNetworkReachabilityGetFlags(defaultRouteReachability!, &flags) {
-            return false
-        }
-        let isReachable = flags.contains(.reachable)
-        let needsConnection = flags.contains(.connectionRequired)
-        return (isReachable && !needsConnection)
-    }
-}
