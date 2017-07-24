@@ -32,7 +32,7 @@ class DataServices {
         let origin = "\(start.latitude),\(start.longitude)"
         let destination = "\(end.latitude),\(end.longitude)"
         
-        let url = "https://maps.googleapis.com/maps/api/directions/json?origin=\(origin)&destination=\(destination)&key=AIzaSyDOn7QCEOzkfEOkzBQgxOVYtXrVQtYR4Vg&mode=driving"
+        let url = "https://maps.googleapis.com/maps/api/directions/json?origin=\(origin)&destination=\(destination)"
         guard let urlRequest = URL(string: url) else {return}
         DispatchQueue.main.async {
             self.requestAPI(request: urlRequest)

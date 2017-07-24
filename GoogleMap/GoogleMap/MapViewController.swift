@@ -52,10 +52,12 @@ class MapViewController: UIViewController {
         guard let path = GMSPath(fromEncodedPath: points) else {
             return
         }
-         let polyline = GMSPolyline(path: path) 
-        polyline.strokeColor = .blue
-        polyline.strokeWidth = 4.0
-        polyline.map = mapView
+        DispatchQueue.main.async {
+            let polyline = GMSPolyline(path: path)
+            polyline.strokeColor = .blue
+            polyline.strokeWidth = 4.0
+            polyline.map = self.mapView
+        }
     }
 }
 
