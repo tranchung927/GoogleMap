@@ -59,39 +59,46 @@ class MapViewController: UIViewController {
             polyline.map = self.mapView
         }
     }
+    func markLocation(location: CLLocationCoordinate2D){
+        marker.map = self.mapView
+        marker.position = CLLocationCoordinate2DMake(location.latitude, location.longitude)
+        marker.snippet = "Population: 8,174,100"
+        marker.title = "Your location"
+        marker.icon = GMSMarker.markerImage(with: .black)
+    }
+    func markDestination(destination: CLLocationCoordinate2D){
+        infoMarker.map = self.mapView
+        infoMarker.position = CLLocationCoordinate2DMake(destination.latitude, destination.longitude)
+        infoMarker.title = "Destination"
+        infoMarker.opacity = 0.8
+        infoMarker.infoWindowAnchor.y = 0
+        mapView.selectedMarker = infoMarker
+    }
 }
 
 // Delegates to handle event for the location manager.
 extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let location: CLLocation = locations.last!
-        startLocation = location.coordinate
         mapView.camera = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: zoomLevel, bearing: 0, viewingAngle: 0)
         mapView.settings.myLocationButton = true
         mapView.isMyLocationEnabled = true
-        
-        marker.map = self.mapView
-        marker.position = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
-        marker.title = "Your location"
-        marker.snippet = "Population: 8,174,100"
-        marker.icon = GMSMarker.markerImage(with: .black)
-        manager.stopUpdatingLocation()
+        startLocation = location.coordinate
+        markLocation(location: startLocation)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        manager.stopUpdatingLocation()
         print("Error\(error)")
     }
 }
 extension MapViewController: GMSMapViewDelegate {
     
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        infoMarker.position = coordinate
+        mapView.clear()
         endLocation = coordinate
-        infoMarker.title = "Destination"
-        infoMarker.opacity = 0.8
-        infoMarker.infoWindowAnchor.y = 0
-        infoMarker.map = mapView
-        mapView.selectedMarker = infoMarker
+        markLocation(location: startLocation)
+        markDestination(destination: coordinate)
         DataServices.shared.drawPath(start: startLocation, end: endLocation)
     }
     func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
